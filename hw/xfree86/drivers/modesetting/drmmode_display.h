@@ -176,6 +176,9 @@ typedef struct {
     DamagePtr damage;
 
     Bool need_clear;
+
+    int dump_fd;
+    uint8_t *dump_buf;
 } drmmode_fb;
 
 typedef struct {
@@ -227,6 +230,7 @@ typedef struct {
     Bool enable_flipping;
     Bool flipping_active;
     Bool is_scale;
+    Bool is_dummy;
 } drmmode_crtc_private_rec, *drmmode_crtc_private_ptr;
 
 typedef struct {
@@ -251,6 +255,7 @@ typedef struct {
     int enc_mask;
     int enc_clone_mask;
     xf86CrtcPtr current_crtc;
+    Bool is_dummy;
 } drmmode_output_private_rec, *drmmode_output_private_ptr;
 
 typedef struct {
