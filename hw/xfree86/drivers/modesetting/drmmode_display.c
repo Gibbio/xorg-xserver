@@ -4782,8 +4782,11 @@ flip:
 
     if (!ms_do_pageflip_bo(screen, &fb->bo, drmmode_crtc,
                            drmmode_crtc->vblank_pipe, crtc, TRUE,
-                           drmmode_flip_fb_handler, drmmode_flip_fb_abort))
-        return FALSE;
+                           drmmode_flip_fb_handler, drmmode_flip_fb_abort)) {
+        /* HACK: Workaround commit random interrupted case */
+        if (errno != EPERM)
+            return FALSE;
+    }
 
     drmmode_crtc->flipping = TRUE;
 
