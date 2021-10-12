@@ -130,6 +130,7 @@ typedef struct {
     Bool hotplug_reset;
 
     enum drmmode_fb_flip_mode fb_flip_mode;
+    int fb_flip_rate;
 
     DevPrivateKeyRec pixmapPrivateKeyRec;
 
