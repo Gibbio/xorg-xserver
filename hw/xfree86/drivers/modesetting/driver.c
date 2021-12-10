@@ -148,6 +148,7 @@ static const OptionInfoRec Options[] = {
     {OPTION_FLIP_FB_RATE, "MaxFlipRate", OPTV_INTEGER, {0}, 0},
     {OPTION_NO_EDID, "NoEDID", OPTV_BOOLEAN, {0}, FALSE},
     {OPTION_HOTPLUG_RESET, "HotplugReset", OPTV_BOOLEAN, {0}, TRUE},
+    {OPTION_HW_CURSOR_FORCE, "HWCursorForce", OPTV_BOOLEAN, {0}, TRUE},
     {-1, NULL, OPTV_NONE, {0}, FALSE}
 };
 
@@ -1642,6 +1643,7 @@ ScreenInit(ScreenPtr pScreen, int argc, char **argv)
     modesettingPtr ms = modesettingPTR(pScrn);
     VisualPtr visual;
     const char *str_value;
+    BOOL hw_cursor_force;
 
     pScrn->pScreen = pScreen;
 
@@ -1736,12 +1738,15 @@ ScreenInit(ScreenPtr pScreen, int argc, char **argv)
     xf86SetSilkenMouse(pScreen);
     miDCInitialize(pScreen, xf86GetPointerScreenFuncs());
 
+    xf86GetOptValBool(ms->drmmode.Options, OPTION_HW_CURSOR_FORCE, &hw_cursor_force);
+
     /* Need to extend HWcursor support to handle mask interleave */
     if (!ms->drmmode.sw_cursor)
         xf86_cursors_init(pScreen, ms->cursor_width, ms->cursor_height,
                           HARDWARE_CURSOR_SOURCE_MASK_INTERLEAVE_64 |
                           HARDWARE_CURSOR_UPDATE_UNHIDDEN |
-                          HARDWARE_CURSOR_ARGB);
+                          HARDWARE_CURSOR_ARGB |
+                          hw_cursor_force ? HARDWARE_CURSOR_FORCE : 0);
 
     /* Must force it before EnterVT, so we are in control of VT and
      * later memory should be bound when allocating, e.g rotate_mem */

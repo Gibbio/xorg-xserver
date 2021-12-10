@@ -571,7 +571,8 @@ xf86_use_hw_cursor(ScreenPtr screen, CursorPtr cursor)
         if (!crtc->enabled)
             continue;
 
-        if (crtc->transformPresent)
+        if (!(cursor_info->Flags & HARDWARE_CURSOR_FORCE) &&
+            crtc->transformPresent)
             return FALSE;
     }
 
